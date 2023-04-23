@@ -2,9 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('../models/article')
+const check  = require('../middleware/authMiddleware')
 
-
-router.get('/dashboard',async(req,res)=>{
+router.get('/dashboard',check.requireAuth,async(req,res)=>{
     const articles = await Article.find().sort({createdAt: 'desc'});
     res.render('articles/index',{articles: articles});
 })
@@ -14,7 +14,7 @@ router.get('/new',(req,res)=>{
 })
 
 
-router.get('/edit/:id',async(req,res)=>{
+router.get('/edit/:id',check.requireAuth,async(req,res)=>{
     const article = await Article.findById(req.params.id);
     res.render('articles/edit',{article: article});
 })
@@ -40,7 +40,7 @@ router.put('/:id',async (req,res,next)=>{
 },saveArticleAndRedirect('edit'))
 
 
-router.delete('/:id',async(req,res)=>{
+router.delete('/:id',check.requireAuth,async(req,res)=>{
     await Article.findByIdAndDelete(req.params.id);
     res.redirect('/');
 })

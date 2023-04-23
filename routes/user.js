@@ -89,6 +89,7 @@ router.post('/login',async(req,res)=>{
         const errors = handleErrors(err);
         res.status(400).json({errors});
     }
+    // res.redirect('/admin/dashboard');
 })
 
 router.get('/logout',async(req,res)=>{
